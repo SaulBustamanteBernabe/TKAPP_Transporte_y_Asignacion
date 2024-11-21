@@ -1,7 +1,8 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+from ttkbootstrap.dialogs.dialogs import Messagebox
 from classes.templates.lblFrameTabla import lblFrameTabla
-
+from classes.templates.lblFrameControles import lblFrameControles
 
 class App(ttk.Window):
     def __init__(self):
@@ -16,6 +17,7 @@ class App(ttk.Window):
         self.set_styles()
         # Variables de los widgets
         self.tabla: lblFrameTabla = None
+        self.controles: lblFrameControles = None
         # Metodos de inicialización y configuración de la aplicación
         self.title("Transporte y Asignación")
         self.set_window(resizable=(True, True))
@@ -25,7 +27,26 @@ class App(ttk.Window):
     def create_widgets(self):
         # Estructura de la aplicación
         self.tabla = lblFrameTabla(self, text="Tabla de Transporte")
+        self.controles = lblFrameControles(self, text="Controles")
+        self.controles.btnResolver.config(command=self.resolver)
     
+    def resolver(self):
+        # Obtiene los datos de la tabla
+        res = self.tabla.get_data()
+        if isinstance(res, ValueError):
+            Messagebox.show_error(parent=self, title="Error", message="Ingresa unicamente valores numéricos")
+            return
+        #res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])#ELIMINAR LINEA
+        matriz_costos, ofertas, demandas = res
+        print(res)
+        # Metodo de resolución
+        metodo = self.controles.optionMethod.get()
+        if metodo == "Esquina Noroeste":
+            pass
+        elif metodo == "Voguel":
+            pass
+        elif metodo == "Costo Mínimo":
+            pass
 
     def set_window(self, width=None, height=None, resizable=(False, False)):
         # Obtiene el tamaño de la pantalla

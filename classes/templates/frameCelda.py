@@ -19,7 +19,7 @@ class frameCelda(ttk.Frame):
         # Estructura de la aplicación
         self.entryCosto = ttk.Entry(self, textvariable=self.costo)
         self.entryCosto.pack(side=TOP, fill=BOTH, expand=True)
-        self.entryCantidad = ttk.Entry(self, textvariable=self.cantidad, state=DISABLED)
+        self.entryCantidad = ttk.Entry(self, textvariable=self.cantidad, state=READONLY, style=READONLY)
         self.entryCantidad.pack(side=TOP, fill=BOTH, expand=True)
     
     def get_costo(self):

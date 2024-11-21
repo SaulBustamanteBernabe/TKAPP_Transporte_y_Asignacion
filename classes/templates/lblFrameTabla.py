@@ -52,6 +52,11 @@ class lblFrameTabla(ttk.LabelFrame):
         self.canvasTable.create_window((0, 0), window=self.frameTable, anchor="nw")
         self.create_table()
 
+    def set_solucion(self, catidades):
+        for r in range(self.row_count):
+            for c in range(self.column_count):
+                self.entryTable[r][c].set_cantidad(catidades[r][c])
+
     def get_data(self):
         matriz_costos: list[list[float]] = []
         ofertas: list[float] = None

@@ -1,7 +1,14 @@
 import numpy as np
 
-matriz_costos = np.array([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]])
+m1 = np.array([[1,2,3],[4,5,6], [7,8,9]])
+m2 = np.array([[1,2,3],[4,5,6], [7,8,9]])
 
-print(np.argmin(matriz_costos, axis=1))
-print(matriz_costos.shape)
-print(np.unravel_index(np.argmin(matriz_costos, axis=1), matriz_costos.shape))
+lista = []
+lista.append(m1)
+lista.append(m2)
+
+lista[0][0,0] = 10
+
+print(lista)
+print(m1)
+print(m2)

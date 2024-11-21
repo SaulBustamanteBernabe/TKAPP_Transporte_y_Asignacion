@@ -8,10 +8,10 @@ class Transporte:
         self.ofertas: ndarray = np.array(ofertas)
         self.demandas: ndarray = np.array(demandas)
         # Variables de la solución
-        self.proceso_costo_solucion: ndarray = np.empty(0)
-        self.proceso_cantidad_solucion: ndarray = np.empty(0)
-        self.proceso_oferta_solucion: ndarray = np.empty(0)
-        self.proceso_demanda_solucion: ndarray = np.empty(0)
+        self.proceso_costo_solucion: list = list()
+        self.proceso_cantidad_solucion: list = list()
+        self.proceso_oferta_solucion: list = list()
+        self.proceso_demanda_solucion: list = list()
         self.costo_solucion: ndarray = np.empty(0)
         self.cantidad_solucion: ndarray = np.empty(0)
         self.oferta_solucion: ndarray = np.empty(0)
@@ -42,13 +42,13 @@ class Transporte:
             elif demandas[j] == 0:
                 j += 1
             # Guardar iteracion en array de procesos
-            self.proceso_cantidad_solucion = np.append(self.proceso_cantidad_solucion, cantidad)
-            self.proceso_oferta_solucion = np.append(self.proceso_oferta_solucion, ofertas)
-            self.proceso_demanda_solucion = np.append(self.proceso_demanda_solucion, demandas)
+            self.proceso_cantidad_solucion.append(cantidad.copy())
+            self.proceso_oferta_solucion.append(ofertas.copy())
+            self.proceso_demanda_solucion.append(demandas.copy())
         # Almacenar ultimo resultado de interación
-        self.cantidad_solucion = cantidad
-        self.oferta_solucion = ofertas
-        self.demanda_solucion = demandas
+        self.cantidad_solucion = cantidad.copy()
+        self.oferta_solucion = ofertas.copy()
+        self.demanda_solucion = demandas.copy()
 
     def voguel(self):
         pass
@@ -89,13 +89,13 @@ class Transporte:
             if demandas[j] == 0:
                 costos[:, j] = np.inf
             # Guardar iteracion en array de procesos
-            self.proceso_cantidad_solucion = np.append(self.proceso_cantidad_solucion, cantidad)
-            self.proceso_oferta_solucion = np.append(self.proceso_oferta_solucion, ofertas)
-            self.proceso_demanda_solucion = np.append(self.proceso_demanda_solucion, demandas)
-            self.proceso_costo_solucion = np.append(self.proceso_costo_solucion, costos)
+            self.proceso_cantidad_solucion.append(cantidad.copy())
+            self.proceso_oferta_solucion.append(ofertas.copy())
+            self.proceso_demanda_solucion.append(demandas.copy())
+            self.proceso_costo_solucion.append(costos.copy())
         # Almacenar ultimo resultado de interación
-        self.cantidad_solucion = cantidad
-        self.oferta_solucion = ofertas
-        self.demanda_solucion = demandas
-        self.costo_solucion = costos
+        self.cantidad_solucion = cantidad.copy()
+        self.oferta_solucion = ofertas.copy()
+        self.demanda_solucion = demandas.copy()
+        self.costo_solucion = costos.copy()
         

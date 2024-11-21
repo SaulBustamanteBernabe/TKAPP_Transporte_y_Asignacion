@@ -37,14 +37,22 @@ class App(ttk.Window):
         if isinstance(res, ValueError):
             Messagebox.show_error(parent=self, title="Error", message="Ingresa unicamente valores numéricos")
             return
-        res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])#ELIMINAR LINEA
+        # res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])#ELIMINAR LINEA
+        # res = ([[12.0, 13.0, 4.0, 6.0], [6.0, 4.0, 10.0, 11.0], [10.0, 9.0, 12.0, 4.0]], [500.0, 700.0, 800.0], [400.0, 900.0, 200.0, 500.0])#ELIMINAR LINEA
         matriz_costos, ofertas, demandas = res
+        print(res)
         # Metodo de resolución
         metodo = self.controles.optionMethod.get()
         if metodo == "Esquina Noroeste":
             transporte = Transporte(matriz_costos, ofertas, demandas)
             transporte.esquina_noroeste()
             self.tabla.set_solucion(transporte.cantidad_solucion)
+            for pcs, pos, pds in zip(transporte.proceso_cantidad_solucion, transporte.proceso_oferta_solucion, transporte.proceso_demanda_solucion):
+                print("Cantidades")
+                print(pcs)
+                print("Ofertas: ", pos)
+                print("Demandas: ", pds)
+                print()
         elif metodo == "Voguel":
             pass
         elif metodo == "Costo Mínimo":

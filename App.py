@@ -95,7 +95,14 @@ class App(ttk.Window):
         self.resizable(*resizable)
 
     def set_styles(self):
-        pass
+        self.styleApp.configure(
+            "TButton",
+            font=("Cascadia", 11, "bold")
+        )
+        self.styleApp.configure(
+            "TNotebook.Tab",
+            font=("Cascadia", 12, "bold")
+        )
 
 
 if __name__ == '__main__':

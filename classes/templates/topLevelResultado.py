@@ -29,7 +29,7 @@ class topLevelResultado(ttk.Toplevel):
 
     def create_widgets(self):
         # Creo notebook para mostrar las tablas en pestañas
-        self.notebook = ttk.Notebook(self, bootstyle=SUCCESS)
+        self.notebook = ttk.Notebook(self, bootstyle=PRIMARY)
         # Bucle para crear las tablas
         for i in range(len(self.resultados.proceso_cantidad_solucion)):
             # Obtengo los datos del proceso de cada tabla
@@ -41,7 +41,7 @@ class topLevelResultado(ttk.Toplevel):
             pos = self.resultados.proceso_oferta_solucion[i]
             pds = self.resultados.proceso_demanda_solucion[i]
             # Crear tabla de solo lectura
-            tabla = lblFrameTabla(self.notebook, rows=len(pos), columns=len(pds), text=f"Paso {i}", readonly=True)
+            tabla = lblFrameTabla(self.notebook, rows=len(pos), columns=len(pds), text=f"Paso {i+1}", readonly=True)
             # Insertar datos en tabla
             tabla.set_costos(np.where(np.isinf(costos), "X", costos))
             tabla.set_solucion(pcs)
@@ -49,7 +49,7 @@ class topLevelResultado(ttk.Toplevel):
             tabla.set_demandas(pds)
             # Guardar tabla
             self.tablas.append(tabla)
-            self.notebook.add(tabla, text=f"Proceso {i}")
+            self.notebook.add(tabla, text=f"Proceso {i+1}")
         # Pestaña de Costo Total
         self.frame_costo_total = ttk.Frame(self.notebook)
         self.label_costo_total = ttk.Label(self.frame_costo_total, text=f"Costo Total = {self.resultados.costo_total}", style=DARK, font=("Rockwell", 48))

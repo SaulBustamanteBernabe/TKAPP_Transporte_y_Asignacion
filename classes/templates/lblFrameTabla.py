@@ -119,7 +119,7 @@ class lblFrameTabla(ttk.LabelFrame):
         self.remove_col_btn.pack(side=LEFT, padx=8, ipadx=5, ipady=5)
 
     def create_table(self):
-        self.labelOrigenDestino = ttk.Label(self.frameTable, text="Origen/Destino")
+        self.labelOrigenDestino = ttk.Label(self.frameTable, text="Origen/Destino", font=("Consolas", 10))
         self.labelOrigenDestino.grid(row=0, column=0, padx=5, pady=5)
         for r in range(self.row_count): # Crea las filas
             row = []
@@ -130,22 +130,22 @@ class lblFrameTabla(ttk.LabelFrame):
             self.entryTable.append(row)
 
         for r in range(self.row_count): # Crea Origen
-            self.listaLabelOrigen.append(ttk.Label(self.frameTable, text=f"{r+1}"))
+            self.listaLabelOrigen.append(ttk.Label(self.frameTable, text=f"{r+1}", font=("Consolas", 14)))
             self.listaLabelOrigen[r].grid(row=r+1, column=0, padx=5, pady=5)
             self.ofertas.append(ttk.StringVar(value="0"))
-            self.listaEntryOrigen.append(ttk.Entry(self.frameTable, textvariable=self.ofertas[r]))
+            self.listaEntryOrigen.append(ttk.Entry(self.frameTable, textvariable=self.ofertas[r], font=("Consolas", 12), width=12, justify=RIGHT))
             self.listaEntryOrigen[r].grid(row=r+1, column=self.column_count+1, padx=5, pady=5)
 
         for c in range(self.column_count): # Crea Destino
-            self.listaLabelDestino.append(ttk.Label(self.frameTable, text=f"{c+1}"))
+            self.listaLabelDestino.append(ttk.Label(self.frameTable, text=f"{c+1}", font=("Consolas", 14)))
             self.listaLabelDestino[c].grid(row=0, column=c+1, padx=5, pady=5)
             self.demandas.append(ttk.StringVar(value="0"))
-            self.listaEntryDestino.append(ttk.Entry(self.frameTable, textvariable=self.demandas[c]))
+            self.listaEntryDestino.append(ttk.Entry(self.frameTable, textvariable=self.demandas[c], font=("Consolas", 12), width=12, justify=RIGHT))
             self.listaEntryDestino[c].grid(row=self.row_count+1, column=c+1, padx=5, pady=5)
         
-        self.labelOferta = ttk.Label(self.frameTable, text="Oferta")
+        self.labelOferta = ttk.Label(self.frameTable, text="Oferta", font=("Consolas", 12))
         self.labelOferta.grid(row=0, column=self.column_count+1, padx=5, pady=5)
-        self.labelDemanda = ttk.Label(self.frameTable, text="Demanda")
+        self.labelDemanda = ttk.Label(self.frameTable, text="Demanda", font=("Consolas", 12))
         self.labelDemanda.grid(row=self.row_count+1, column=0, padx=5, pady=5)
         self.update_scrollregion()
 
@@ -161,10 +161,10 @@ class lblFrameTabla(ttk.LabelFrame):
         self.entryTable.append(row)
         self.row_count += 1
         # Añade una nueva entrada de Oferta
-        self.listaLabelOrigen.append(ttk.Label(self.frameTable, text=f"{self.row_count}"))
+        self.listaLabelOrigen.append(ttk.Label(self.frameTable, text=f"{self.row_count}", font=("Consolas", 14)))
         self.listaLabelOrigen[-1].grid(row=self.row_count, column=0, padx=5, pady=5)
         self.ofertas.append(ttk.StringVar(value="0"))
-        self.listaEntryOrigen.append(ttk.Entry(self.frameTable, textvariable=self.ofertas[-1]))
+        self.listaEntryOrigen.append(ttk.Entry(self.frameTable, textvariable=self.ofertas[-1], font=("Consolas", 12), width=12, justify=RIGHT))
         self.listaEntryOrigen[-1].grid(row=self.row_count, column=self.column_count+1, padx=5, pady=5)
         # Añade la poción de la fila Demanda
         self.assign_demanda()
@@ -198,10 +198,10 @@ class lblFrameTabla(ttk.LabelFrame):
             self.entryTable[r][-1].grid(row=r+1, column=self.column_count+1, padx=5, pady=5)
         self.column_count += 1
         # Añade una nueva entrada de Demanda
-        self.listaLabelDestino.append(ttk.Label(self.frameTable, text=f"{self.column_count}"))
+        self.listaLabelDestino.append(ttk.Label(self.frameTable, text=f"{self.column_count}", font=("Consolas", 14)))
         self.listaLabelDestino[-1].grid(row=0, column=self.column_count, padx=5, pady=5)
         self.demandas.append(ttk.StringVar(value="0"))
-        self.listaEntryDestino.append(ttk.Entry(self.frameTable, textvariable=self.demandas[-1]))
+        self.listaEntryDestino.append(ttk.Entry(self.frameTable, textvariable=self.demandas[-1], font=("Consolas", 12), width=12, justify=RIGHT))
         self.listaEntryDestino[-1].grid(row=self.row_count+1, column=self.column_count, padx=5, pady=5)
         # Añade la poción de la columna Oferta
         self.assign_oferta()

@@ -17,7 +17,7 @@ class lblFrameControles(ttk.LabelFrame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.optionMethod = ttk.Combobox(self, bootstyle=READONLY, state='readonly', values=self.options, width=20)
+        self.optionMethod = ttk.Combobox(self, bootstyle=READONLY, state='readonly', values=self.options, width=24, font=("Cascadia", 11))
         self.optionMethod.current(0)
         self.optionMethod.pack(side=ttk.LEFT, padx=10, pady=(10, 15))
         self.btnResolver = ttk.Button(self, text="Resolver", bootstyle=PRIMARY)

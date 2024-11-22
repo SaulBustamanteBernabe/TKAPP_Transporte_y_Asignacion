@@ -17,9 +17,9 @@ class frameCelda(ttk.Frame):
 
     def create_widgets(self):
         # Estructura de la aplicación
-        self.entryCosto = ttk.Entry(self, textvariable=self.costo)
+        self.entryCosto = ttk.Entry(self, textvariable=self.costo, font=("Consolas", 12), width=12, justify=RIGHT)
         self.entryCosto.pack(side=TOP, fill=BOTH, expand=True)
-        self.entryCantidad = ttk.Entry(self, textvariable=self.cantidad, state=READONLY, style=READONLY)
+        self.entryCantidad = ttk.Entry(self, textvariable=self.cantidad, state=READONLY, style=READONLY, font=("Consolas", 12), width=12, justify=RIGHT)
         self.entryCantidad.pack(side=TOP, fill=BOTH, expand=True)
     
     def get_costo(self):

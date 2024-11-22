@@ -112,7 +112,7 @@ class Transporte:
             self.proceso_oferta_solucion.append(ofertas.copy())
             self.proceso_demanda_solucion.append(demandas.copy())
             self.proceso_costo_solucion.append(costos.copy())
-            self.proceso_penalidades.append(penalidades)
+            self.proceso_penalidades.append(penalidades.copy())
         # Almacenar ultimo resultado de interación
         self.cantidad_solucion = cantidad.copy()
         self.oferta_solucion = ofertas.copy()

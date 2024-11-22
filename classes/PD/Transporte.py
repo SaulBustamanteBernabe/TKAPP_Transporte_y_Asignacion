@@ -119,8 +119,7 @@ class Transporte:
         self.demanda_solucion = demandas.copy()
         self.costo_solucion = costos.copy()
         # Calcular costo total
-        self.calcular_costo_total()
-                
+        self.calcular_costo_total()  
 
     def costo_minimo(self):
         # Comprobar datos de entrada

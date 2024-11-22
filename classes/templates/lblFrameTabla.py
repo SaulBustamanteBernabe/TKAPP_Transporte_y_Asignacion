@@ -4,7 +4,7 @@ from .frameCelda import frameCelda
 
 
 class lblFrameTabla(ttk.LabelFrame):
-    def __init__(self, parent, rows = 3, columns = 3, **kwargs):
+    def __init__(self, parent, rows = 3, columns = 3, readonly=False, **kwargs):
         super().__init__(parent, **kwargs)
         self.pack(side=TOP, fill=BOTH, expand=True, padx=10, pady=10)
         # Variables de los widgets
@@ -27,6 +27,7 @@ class lblFrameTabla(ttk.LabelFrame):
         self.button_add_column: ttk.Button = None
         self.button_remove_column: ttk.Button = None
         # Variables logicas
+        self.readonly: bool = readonly
         self.row_count: int = rows
         self.column_count: int = columns
         self.ofertas: list[ttk.StringVar] = []
@@ -37,9 +38,10 @@ class lblFrameTabla(ttk.LabelFrame):
 
     def create_widgets(self):
         # Estructura de la aplicación
-        self.frameControles = ttk.Frame(self)
-        self.frameControles.pack(side=TOP, fill=X, ipadx=5, ipady=5)
-        self.create_buttons()
+        if not self.readonly:
+            self.frameControles = ttk.Frame(self)
+            self.frameControles.pack(side=TOP, fill=X, ipadx=5, ipady=5)
+            self.create_buttons()
         self.canvasTable = ttk.Canvas(self)
         self.scroll_x = ttk.Scrollbar(self, orient=HORIZONTAL, command=self.canvasTable.xview)
         self.scroll_y = ttk.Scrollbar(self, orient=VERTICAL, command=self.canvasTable.yview)
@@ -52,11 +54,27 @@ class lblFrameTabla(ttk.LabelFrame):
         self.canvasTable.create_window((0, 0), window=self.frameTable, anchor="nw")
         self.create_table()
 
+    def set_readonly(self):
+        self.frameControles.pack_forget()
+
+    def set_costos(self, costos):
+        for r in range(self.row_count):
+            for c in range(self.column_count):
+                self.entryTable[r][c].set_costo(costos[r][c])
+
     def set_solucion(self, catidades):
         for r in range(self.row_count):
             for c in range(self.column_count):
                 self.entryTable[r][c].set_cantidad(catidades[r][c])
-
+    
+    def set_ofertas(self, ofertas):
+        for r in range(self.row_count):
+            self.ofertas[r].set(ofertas[r])
+    
+    def set_demandas(self, demandas):
+        for r in range(self.column_count):
+            self.demandas[r].set(demandas[r])
+            
     def get_data(self):
         matriz_costos: list[list[float]] = []
         ofertas: list[float] = None

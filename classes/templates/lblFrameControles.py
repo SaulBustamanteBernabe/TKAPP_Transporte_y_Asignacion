@@ -12,7 +12,7 @@ class lblFrameControles(ttk.LabelFrame):
         self.btnResolver:ttk.Button = None
 
         # Variables logicas
-        self.options = ["Esquina Noroeste", "Voguel", "Costo Mínimo"]
+        self.options = ["Esquina Noroeste", "Voguel", "Costo Mínimo", "Banquillo", "DIMO"]
 
         self.create_widgets()
 

@@ -38,7 +38,7 @@ class App(ttk.Window):
         if isinstance(res, ValueError):
             Messagebox.show_error(parent=self, title="Error", message="Ingresa unicamente valores numéricos")
             return
-        res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])#ELIMINAR LINEA
+        # res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])#ELIMINAR LINEA
         # res = ([[25.0, 35.0, 36.0, 60.0], [55.0, 30.0, 45.0, 38.0], [40.0, 50.0, 26.0, 65.0], [60.0, 40.0, 66.0, 27.0]], [15.0, 6.0, 14.0, 11.0], [10.0, 12.0, 15.0, 9.0])
         # res = ([[12.0, 13.0, 4.0, 6.0], [6.0, 4.0, 10.0, 11.0], [10.0, 9.0, 12.0, 4.0]], [500.0, 700.0, 800.0], [400.0, 900.0, 200.0, 500.0])#ELIMINAR LINEA
         matriz_costos, ofertas, demandas = res
@@ -57,6 +57,12 @@ class App(ttk.Window):
             transporte = Transporte(matriz_costos, ofertas, demandas)
             transporte.costo_minimo()
             self.tabla.set_solucion(transporte.cantidad_solucion)
+        elif metodo == "Banquillo":
+            transporte = Transporte(matriz_costos, ofertas, demandas)
+            transporte.banquillo()
+            self.tabla.set_solucion(transporte.cantidad_solucion)
+        elif metodo == "DIMO":
+            pass
         resultados = topLevelResultado(self, transporte, f"Metodo {metodo}")
         for i in range(len(transporte.proceso_cantidad_solucion)):
             pcs, pos, pds = transporte.proceso_cantidad_solucion[i], transporte.proceso_oferta_solucion[i], transporte.proceso_demanda_solucion[i]

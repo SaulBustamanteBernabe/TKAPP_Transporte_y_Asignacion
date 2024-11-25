@@ -1,5 +1,13 @@
 import numpy as np
+from classes.PD.Transporte import Transporte
 
-M1 = np.array([[1, 2, 3], [4, np.inf, 6]])
+res = ([[12.0, 13.0, 4.0, 6.0], [6.0, 4.0, 10.0, 11.0], [10.0, 9.0, 12.0, 4.0]], [500.0, 700.0, 800.0], [400.0, 900.0, 200.0, 500.0])#ELIMINAR LINEA
 
-print(np.where(np.isinf(M1), "X", M1))
+matriz_costos, ofertas, demandas = res
+print(res)
+
+transporte = Transporte(matriz_costos, ofertas, demandas)
+transporte.banquillo()
+for i in transporte.proceso_cantidad_solucion:
+    print(i)
+print(transporte.cantidad_solucion)

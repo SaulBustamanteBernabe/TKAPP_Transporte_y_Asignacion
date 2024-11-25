@@ -19,6 +19,100 @@ class Transporte:
         self.costo_total: float = 0.0
         self.proceso_penalidades: list = list()
 
+    def banquillo(self):
+        # Paso 1: Iniciar con una solución básica factible inicial
+        if self.cantidad_solucion.size == 0:
+            self.esquina_noroeste()  # Usa esquina_noroeste si no hay solución inicial
+        # Crear copias de las matrices relevantes
+        cantidad = self.cantidad_solucion.copy()
+        filas, columnas = cantidad.shape
+
+        while True:
+            # Paso 2: Calcular costos de trayectoria para celdas libres
+            costos_trayectoria = np.full((filas, columnas), np.inf)
+            ocupadas = cantidad > 0
+            for i in range(filas):
+                for j in range(columnas):
+                    if not ocupadas[i, j]:  # Sólo calcular para celdas libres
+                        costos_trayectoria[i, j] = self.calcular_ruta(cantidad, (i, j))
+            # Paso 3: Verificar optimalidad
+            if np.all(costos_trayectoria >= 0):
+                # Almacenar ultimo resultado de interación
+                self.cantidad_solucion = cantidad.copy()
+                self.costo_solucion = self.matriz_costos.copy()
+                self.calcular_costo_total()
+                break
+            # Encontrar la celda con el costo de trayectoria más negativo
+            i_min, j_min = np.unravel_index(np.argmin(costos_trayectoria), costos_trayectoria.shape)
+            # Paso 4: Reasignar cantidades
+            ciclo = self.encontrar_ciclo(cantidad, (i_min, j_min))
+            celda_fila_adyacente, celda_columna_adyacente, celda_opuesta = ciclo[1], ciclo[-2], ciclo[-3]
+            if cantidad[celda_fila_adyacente] < cantidad[celda_columna_adyacente]:
+                asignacion = cantidad[celda_fila_adyacente]
+                cantidad[i_min, j_min] += asignacion
+                cantidad[celda_fila_adyacente] -= asignacion
+                cantidad[celda_columna_adyacente] -= asignacion
+                cantidad[celda_opuesta] += asignacion
+            else:
+                asignacion = cantidad[celda_columna_adyacente]
+                cantidad[i_min, j_min] += asignacion
+                cantidad[celda_columna_adyacente] -= asignacion
+                cantidad[celda_fila_adyacente] -= asignacion
+                cantidad[celda_opuesta] += asignacion
+            # Guardar iteracion en array de procesos
+            self.proceso_cantidad_solucion.append(cantidad.copy())
+            self.proceso_oferta_solucion.append(self.oferta_solucion.copy())
+            self.proceso_demanda_solucion.append(self.demanda_solucion.copy())
+            if len(self.proceso_costo_solucion) > 0:
+                self.proceso_costo_solucion.append(self.matriz_costos.copy())   
+    
+    def calcular_ruta(self, cantidad_actual: ndarray, celda_inicial: tuple):
+        trayectoria = self.encontrar_ciclo(cantidad_actual, celda_inicial)
+        costo_trayectoria = 0
+        for k, l in trayectoria[0:-1:2]:
+            costo_trayectoria += self.matriz_costos[k, l]
+        for m, n in trayectoria[1:-1:2]:
+            costo_trayectoria -= self.matriz_costos[m, n]
+        return costo_trayectoria
+
+    def encontrar_ciclo(self, cantidad_actual: ndarray, celda_inicial: tuple):
+        def dfs(celda, visitados: set, camino: list):
+            i, j = celda
+            visitados.add(celda)
+            camino.append(celda)
+            # Alternar entre búsqueda en fila y columna
+            if len(camino) % 2 == 1:  # Buscar en la fila
+                for col in range(cantidad_actual.shape[1]):
+                    if col != j and (i, col) in ocupadas:  # Evitar la misma celda
+                        if (i, col) == celda_inicial and len(camino) > 3:  # Verificar ciclo
+                            return camino + [celda_inicial]
+                        if (i, col) not in visitados:
+                            ciclo = dfs((i, col), visitados, camino)
+                            if ciclo:
+                                return ciclo
+            else:  # Buscar en la columna
+                for fila in range(cantidad_actual.shape[0]):
+                    if fila != i and (fila, j) in ocupadas:  # Evitar la misma celda
+                        if (fila, j) == celda_inicial and len(camino) > 3:  # Verificar ciclo
+                            return camino + [celda_inicial]
+                        if (fila, j) not in visitados:
+                            ciclo = dfs((fila, j), visitados, camino)
+                            if ciclo:
+                                return ciclo
+            # Retroceder si no hay ciclo encontrado
+            camino.pop()
+            visitados.remove(celda)
+            return None
+
+        # Identificar celdas ocupadas
+        ocupadas = {(i, j) for i in range(cantidad_actual.shape[0]) for j in range(cantidad_actual.shape[1]) if cantidad_actual[i, j] > 0}
+        ocupadas.add(celda_inicial)  # Agregar la celda inicial como ocupada temporalmente
+        # Iniciar DFS desde la celda inicial
+        ciclo = dfs(celda_inicial, set(), [])
+        if not ciclo:
+            raise ValueError("No se pudo encontrar un ciclo cerrado desde la celda inicial.")
+        return ciclo
+
     def esquina_noroeste(self):
         # Comprobar datos de entrada
         if self.ofertas is None:

@@ -19,6 +19,65 @@ class Transporte:
         self.costo_total: float = 0.0
         self.proceso_penalidades: list = list()
 
+    def DIMO(self):
+        # Paso 1: Iniciar con una solución básica factible inicial
+        if self.cantidad_solucion.size == 0:
+            self.esquina_noroeste()  # Usa esquina_noroeste si no hay solución inicial
+        # Crear copias de las matrices relevantes
+        cantidad = self.cantidad_solucion.copy()
+        costos = self.matriz_costos.copy()
+        filas, columnas = cantidad.shape
+
+        while True:
+            # Paso 2: Calcular costos de trayectoria para celdas libres
+            u = np.full(filas, None)  # Potenciales de filas
+            v = np.full(columnas, None)  # Potenciales de columnas
+            u[0] = 0  # Inicializar con u[0] = 0
+            for i in range(filas):
+                for j in range(columnas):
+                    if cantidad[i, j] > 0:  # Celda ocupada
+                        if u[i] is not None and v[j] is None:
+                            v[j] = costos[i, j] - u[i]
+                        elif u[i] is None and v[j] is not None:
+                            u[i] = costos[i, j] - v[j]
+            # Calcular costos marginales para celdas libres
+            marginalidades = np.full_like(costos, np.inf)
+            for i in range(filas):
+                for j in range(columnas):
+                    if cantidad[i, j] == 0:  # Celda libre
+                        if u[i] is not None and v[j] is not None:
+                            marginalidades[i, j] = costos[i, j] - (u[i] + v[j])
+            # Paso 3: Verificar optimalidad
+            if np.all(marginalidades >= 0):
+                # Almacenar ultimo resultado de interación
+                self.cantidad_solucion = cantidad.copy()
+                self.costo_solucion = self.matriz_costos.copy()
+                self.calcular_costo_total()
+                break
+            # Encontrar la celda con el costo de trayectoria más negativo
+            i_min, j_min = np.unravel_index(np.argmin(marginalidades), marginalidades.shape)
+            # Paso 4: Reasignar cantidades
+            ciclo = self.encontrar_ciclo(cantidad, (i_min, j_min))
+            celda_fila_adyacente, celda_columna_adyacente, celda_opuesta = ciclo[1], ciclo[-2], ciclo[-3]
+            if cantidad[celda_fila_adyacente] < cantidad[celda_columna_adyacente]:
+                asignacion = cantidad[celda_fila_adyacente]
+                cantidad[i_min, j_min] += asignacion
+                cantidad[celda_fila_adyacente] -= asignacion
+                cantidad[celda_columna_adyacente] -= asignacion
+                cantidad[celda_opuesta] += asignacion
+            else:
+                asignacion = cantidad[celda_columna_adyacente]
+                cantidad[i_min, j_min] += asignacion
+                cantidad[celda_columna_adyacente] -= asignacion
+                cantidad[celda_fila_adyacente] -= asignacion
+                cantidad[celda_opuesta] += asignacion
+            # Guardar iteracion en array de procesos
+            self.proceso_cantidad_solucion.append(cantidad.copy())
+            self.proceso_oferta_solucion.append(self.oferta_solucion.copy())
+            self.proceso_demanda_solucion.append(self.demanda_solucion.copy())
+            if len(self.proceso_costo_solucion) > 0:
+                self.proceso_costo_solucion.append(self.matriz_costos.copy()) 
+
     def banquillo(self):
         # Paso 1: Iniciar con una solución básica factible inicial
         if self.cantidad_solucion.size == 0:
@@ -29,6 +88,7 @@ class Transporte:
 
         while True:
             # Paso 2: Calcular costos de trayectoria para celdas libres
+            print(cantidad)
             costos_trayectoria = np.full((filas, columnas), np.inf)
             ocupadas = cantidad > 0
             for i in range(filas):
@@ -36,6 +96,7 @@ class Transporte:
                     if not ocupadas[i, j]:  # Sólo calcular para celdas libres
                         costos_trayectoria[i, j] = self.calcular_ruta(cantidad, (i, j))
             # Paso 3: Verificar optimalidad
+            print(costos_trayectoria)
             if np.all(costos_trayectoria >= 0):
                 # Almacenar ultimo resultado de interación
                 self.cantidad_solucion = cantidad.copy()
@@ -67,13 +128,16 @@ class Transporte:
                 self.proceso_costo_solucion.append(self.matriz_costos.copy())   
     
     def calcular_ruta(self, cantidad_actual: ndarray, celda_inicial: tuple):
-        trayectoria = self.encontrar_ciclo(cantidad_actual, celda_inicial)
-        costo_trayectoria = 0
-        for k, l in trayectoria[0:-1:2]:
-            costo_trayectoria += self.matriz_costos[k, l]
-        for m, n in trayectoria[1:-1:2]:
-            costo_trayectoria -= self.matriz_costos[m, n]
-        return costo_trayectoria
+        try:
+            trayectoria = self.encontrar_ciclo(cantidad_actual, celda_inicial)
+            costo_trayectoria = 0
+            for k, l in trayectoria[0:-1:2]:
+                costo_trayectoria += self.matriz_costos[k, l]
+            for m, n in trayectoria[1:-1:2]:
+                costo_trayectoria -= self.matriz_costos[m, n]
+            return costo_trayectoria
+        except ValueError:
+            return np.inf
 
     def encontrar_ciclo(self, cantidad_actual: ndarray, celda_inicial: tuple):
         def dfs(celda, visitados: set, camino: list):

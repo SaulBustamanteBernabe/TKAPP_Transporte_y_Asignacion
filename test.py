@@ -1,8 +1,7 @@
 import numpy as np
 from classes.PD.Transporte import Transporte
 
-res = ([[12.0, 13.0, 4.0, 6.0], [6.0, 4.0, 10.0, 11.0], [10.0, 9.0, 12.0, 4.0]], [500.0, 700.0, 800.0], [400.0, 900.0, 200.0, 500.0])#ELIMINAR LINEA
-
+res = ([[3.0, 2.0, 7.0, 6.0], [7.0, 5.0, 2.0, 3.0], [2.0, 5.0, 4.0, 5.0]], [5000.0, 6000.0, 2500.0], [6000.0, 4000.0, 2000.0, 1500.0])
 matriz_costos, ofertas, demandas = res
 print(res)
 

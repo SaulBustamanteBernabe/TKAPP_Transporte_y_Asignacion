@@ -62,8 +62,12 @@ class App(ttk.Window):
             transporte.banquillo()
             self.tabla.set_solucion(transporte.cantidad_solucion)
         elif metodo == "DIMO":
-            pass
+            transporte = Transporte(matriz_costos, ofertas, demandas)
+            transporte.DIMO()
+            self.tabla.set_solucion(transporte.cantidad_solucion)
         resultados = topLevelResultado(self, transporte, f"Metodo {metodo}")
+
+    def debug_transporte(self, transporte: Transporte):
         for i in range(len(transporte.proceso_cantidad_solucion)):
             pcs, pos, pds = transporte.proceso_cantidad_solucion[i], transporte.proceso_oferta_solucion[i], transporte.proceso_demanda_solucion[i]
             print("Cantidades: ")

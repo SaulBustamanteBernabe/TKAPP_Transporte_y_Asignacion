@@ -88,7 +88,6 @@ class Transporte:
 
         while True:
             # Paso 2: Calcular costos de trayectoria para celdas libres
-            print(cantidad)
             costos_trayectoria = np.full((filas, columnas), np.inf)
             ocupadas = cantidad > 0
             for i in range(filas):
@@ -96,7 +95,6 @@ class Transporte:
                     if not ocupadas[i, j]:  # Sólo calcular para celdas libres
                         costos_trayectoria[i, j] = self.calcular_ruta(cantidad, (i, j))
             # Paso 3: Verificar optimalidad
-            print(costos_trayectoria)
             if np.all(costos_trayectoria >= 0):
                 # Almacenar ultimo resultado de interación
                 self.cantidad_solucion = cantidad.copy()

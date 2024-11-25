@@ -60,7 +60,7 @@ class App(ttk.Window):
         elif metodoOptimo == "DIMO":
             transporte.DIMO()
         self.tabla.set_solucion(transporte.cantidad_solucion)
-        resultados = topLevelResultado(self, transporte, f"Metodo {metodo}")
+        resultados = topLevelResultado(self, transporte, f"Metodo {metodoOptimo}")
     
     def resolver(self):
         # Obtiene los datos de la tabla
